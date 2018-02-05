@@ -1,3 +1,5 @@
+// created by Jiabin.Li
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -5,7 +7,19 @@
 
 using namespace std;
 
-int lcs(const string& A, const string& B) {
+string loadFile(const char filename[]) {
+	ifstream f(filename);
+	string contents;
+	string temp;
+	while (!f.eof()) {
+		f >> temp;
+		cout << temp;
+		contents += temp;
+	}
+	return contents;
+}
+
+int LCS(const string& A, const string& B) {
 	int len_a = A.size();
 	int len_b = B.size();
 	if (len_a == 0 || len_b == 0) {
@@ -39,25 +53,10 @@ int lcs(const string& A, const string& B) {
 	return dp[len_a][len_b];
 }
 
-int LCS(const string& file1, const string& file2) {
-	int n = 0;
-	string s1, s2;
-//	vector<string> vA, VB;
-	ifstream f1(file1);
-	ifstream f2(file2);
-	while(!f1.eof() and !f2.eof()){
-		getline(f1, s1);
-		getline(f2, s2);
-		n = n + lcs(s1, s2);
-	}
-
-	return n;
-}
-
-
-int main() {
-	int n = 0;
-	n = LCS("file1.txt", "file1.txt");
-	cout << n << endl;
+int main(int argc, char* argv[]) {
+	string a = loadFile(argv[1]);
+	string b = loadFile(argv[2]);
+	cout << a << " " << b << endl;
+	cout << LCS(a, b) << endl;
 	return 0;
 }
