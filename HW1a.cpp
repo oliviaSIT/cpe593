@@ -4,10 +4,10 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <streambuf>
 
 using namespace std;
 
+//Solution1: '\n' is concluded
 string loadFile(const char filename[]) {
 	vector<char> res;
 
@@ -19,6 +19,23 @@ string loadFile(const char filename[]) {
         f.close();
         return string(res.begin(), res.end());
 }
+
+/*Solution2: '\n' is not conculded
+string loadFile(const char filename[]) {
+        ifstream f(filename);
+	string contents(""), temp("");
+
+	while (!f.eof()) {
+		f >> temp;
+		contents += temp;
+		temp = "";
+	}
+
+	f.close();
+
+	return contents;
+}
+*/
 
 int LCS(const string& A, const string& B) {
 	int len_a = A.size();
@@ -57,7 +74,8 @@ int LCS(const string& A, const string& B) {
 int main(int argc, char* argv[]) {
 	string a = loadFile(argv[1]);
 	string b = loadFile(argv[2]);
-	cout << a << b  ;
-	cout << LCS(a, b) << endl;
+	cout << "file1:" << '\n' << a << endl;
+	cout << "file2:" << '\n' << b << endl;
+	cout << "the result is: " << LCS(a, b) << endl;
 	return 0;
 }
