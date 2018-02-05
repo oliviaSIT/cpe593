@@ -4,19 +4,20 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <streambuf>
 
 using namespace std;
 
 string loadFile(const char filename[]) {
-	ifstream f(filename);
-	string contents;
-	string temp;
-	while (!f.eof()) {
-		f >> temp;
-		cout << temp;
-		contents += temp;
-	}
-	return contents;
+	vector<char> res;
+
+        ifstream f(filename);
+        char c;
+        while(f.get(c)) {
+                res.push_back(c);
+        }
+        f.close();
+        return string(res.begin(), res.end());
 }
 
 int LCS(const string& A, const string& B) {
@@ -56,7 +57,7 @@ int LCS(const string& A, const string& B) {
 int main(int argc, char* argv[]) {
 	string a = loadFile(argv[1]);
 	string b = loadFile(argv[2]);
-	cout << a << " " << b << endl;
+	cout << a << b  ;
 	cout << LCS(a, b) << endl;
 	return 0;
 }
