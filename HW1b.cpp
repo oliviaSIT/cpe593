@@ -21,7 +21,7 @@ int computerLength(char* A) {
 int editDistance(char* A, char* B) {
 	int a_len = computerLength(A);
 	int b_len = computerLength(B);	
-//	cout << a_len << endl;
+
 	if (a_len == 0)
 		return b_len;
 
@@ -33,13 +33,7 @@ int editDistance(char* A, char* B) {
             vector<int> one(b_len + 1, 0);
             dp.push_back(one);
         }
-	cout << a_len << ' ' << b_len << endl;
-	for (int i = 0; i < a_len + 1; i++) {
-		for(int j = 0; j < b_len + 1; j++) {
-			cout << dp[i][j] << ' ';
-		}
-		cout << endl;
-	}		
+		
 
 	for(int i = 0; i < a_len + 1; i++) {
             dp[i][0] = i;
@@ -48,8 +42,7 @@ int editDistance(char* A, char* B) {
             dp[0][j] = j;
         }
 
-//	char* idx1 = A ;
-//	char* idx2 = B ;
+
 	for (int i = 1; i < a_len + 1; i++) {
 		for (int j = 1; j < b_len + 1; j++) {
 			if (*(A + i -1) == *(B + j - 1)) {
@@ -57,14 +50,7 @@ int editDistance(char* A, char* B) {
 			}else {
 				dp[i][j] = 1 + min(dp[i - 1][j - 1], min(dp[i - 1][j], dp[i][j - 1]));
 			}
-						
-			if (i == a_len) {
-				cout << *(A + i -1) << ' ' << *(B + j - 1) << '\n';
-				cout << dp[i][j] << endl;
-			}	
 		}
-		
-		cout << dp[a_len][0] <<endl;
 	}
 	
         
@@ -74,9 +60,8 @@ int editDistance(char* A, char* B) {
 
 
 int main() {
-	char A[] = {'h', 'e', 'l', 'l', 'o'};
-	char B[] = {'h', 'e', 'r', 'o'};
-//	cout << computerLength(A) << ' ' << computerLength(B) << '\n';
+	char A[] = "aabbccdd";
+	char B[] = "aaccddee";
 	cout << editDistance(A, B) << endl;
 
 	return 0;
