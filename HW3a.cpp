@@ -11,7 +11,7 @@ vector<int> loadFile(const char filename[]) {
 	vector<int> data;
 	
 	fstream fs(filename);
-//	fs.open();
+	
 	int n;
 	int line = 0;
         while(!fs.eof()) {
@@ -23,6 +23,7 @@ vector<int> loadFile(const char filename[]) {
 		}
         }
         fs.close();
+	data.pop_back();
 
 	return data;
 }
