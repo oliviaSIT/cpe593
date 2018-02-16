@@ -3,8 +3,29 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <string>
 
 using namespace std;
+
+vector<int> loadFile(const char filename[]) {
+	vector<int> data;
+	
+	fstream fs(filename);
+//	fs.open();
+	int n;
+	int line = 0;
+        while(!fs.eof()) {
+		fs >> n;
+		if (line == 0) {
+			line++;			
+		} else {
+                	data.push_back(n);
+		}
+        }
+        fs.close();
+
+	return data;
+}
 
 void insertionSort(vector<int>& data) {
 	if (data.empty()) {
@@ -30,8 +51,8 @@ void insertionSort(vector<int>& data) {
 	return;
 }
 
-int main() {
-	vector<int> data{1, 3, 2, 6, 5, 2, 10, 9, 11, 8, 7};
+int main(int argc, char* argv[]) {
+	vector<int> data = loadFile(argv[1]);
 	insertionSort(data);
 
 	for (size_t i = 0; i < data.size(); i++) {
