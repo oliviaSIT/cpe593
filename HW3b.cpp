@@ -8,6 +8,27 @@
 
 using namespace std;
 
+vector<int> loadFile(const char filename[]) {
+	vector<int> data;
+	
+	fstream fs(filename);
+	
+	int n;
+	int line = 0;
+        while(!fs.eof()) {
+		fs >> n;
+		if (line == 0) {
+			line++;			
+		} else {
+                	data.push_back(n);
+		}
+        }
+        fs.close();
+	data.pop_back();
+
+	return data;
+}
+
 int Partition(vector<int>& v, int p, int r) {
         int k = (rand() % (r - p + 1)) + p;
         swap(v[k], v[r]);
@@ -35,22 +56,16 @@ void quickSort(vector<int>& v, int p, int r) {
 	}
 } 
 
-int main() {
-	vector<int> v;
-//	int n;
-	for (int i = 20; i > 0; i--) {
-		//n = rand() % 1001;
-		v.push_back(i);
-	}
-	
-	quickSort(v, 0, v.size() - 1);
 
-	for (size_t i = 0; i < 20; i++) {
-		cout << v[i] << ' ';
+int main(int argc, char* argv[]) {
+	vector<int> data = loadFile(argv[1]);
+	quickSort(data, 0, (int)data.size() - 1);
+
+	for (size_t i = 0; i < data.size(); i++) {
+		cout << data[i] << ' ';
 	}
 
 	cout << endl;
 	
-
 	return 0;
 }
