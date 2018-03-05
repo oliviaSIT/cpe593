@@ -1,11 +1,11 @@
-// created by Jiabin.Li
+//created by Jiabin.Li
 
 #include <iostream>
 #include <vector>
 #include <fstream>
 #include <sstream>
 #include <string>
-#include <climits>
+#include <cfloat>
 
 using namespace std;
 
@@ -13,23 +13,24 @@ class Point {
 public:
 	double x, y;
 
-	Point(double x, double y):x(x), y(y) {}
+	Point(double x = 0, double y = 0):x(x), y(y) {}
 };
 
 class GrowArray {
 public:
-	Point data[];
+	Point* data;
 	int used;
+	int size;
 
-	GrowArray(int size = 0) {
-		size = 0 ? 1 : size;
+	GrowArray(int s = 0) {
+		size = s == 0 ? 1 : s;
 
 		data = new Point[size];
 		used = 0; 
 	}
 
 	void grow() {
-		if (used < data.length())
+		if (used < size)
 			return;
 
 		//int t[] = data;//not right
@@ -38,12 +39,13 @@ public:
 //			t[i] = data[i];
 //		}
 
-		data = new Point[2 * data.length()];
+		data = new Point[2 * size];
 
 		for (int i = 0; i < used; i++) {
 			data[i] = old[i];
 		}
-
+		
+		size *= 2;
 		delete[] old;
 	}
 
@@ -68,7 +70,7 @@ public:
 
 class ConvexHull {
 public:
-	GrowArray data[];
+	GrowArray* data;
 	int size;
 	double minx, miny, maxx, maxy;
 
@@ -76,19 +78,19 @@ public:
 		data = new GrowArray[s * s];
 		size = s;
 
-		for (int i = 0; i < s * s; i++) {
-			data[i] = new GrowArray();
-		}
+//		for (int i = 0; i < s * s; i++) {
+//			data[i] = GrowArray(2);
+//		}
 	}
 
 	void read(const string& filename) {
-		fstream f(filename);
-		GrowArray t = new GrowArray();
+		fstream f;
+		GrowArray t(1);
 		double minx = DBL_MAX, miny = DBL_MAX, maxx = DBL_MIN, maxy = DBL_MIN;
 		
 		double x, y;
 		string line;
-		f.open();
+		f.open(filename);
 		while (!f.eof()) {
 			getline(f, line);
 			istringstream iss(line);
@@ -128,18 +130,19 @@ public:
 	void printAllListSizes() {
 		cout << "the size of all lists:" << endl;
 
-		for (auto i: data ) {
-			cout << "p" << to_string(i + 1) << ":" << i.length() << endl;
+		for (int i = 0; i < size * size; i++ ) {
+			cout << "p" << to_string(i + 1) << ":" << data[i].length() << endl;
 		}
 	}
 
-	void printPerimeterClockOrder() {
+	void printPerimeterClockWiseOrder() {
 		cout << "the points in all lists:" << endl;
-		for (auto i: data ) {
+		
+		for (int i = 0; i < size * size; i++) {
                         cout << "p" << to_string(i + 1) << ":" << endl;
 
-			for (auto j: i) {
-				cout << "(" << j.x << ", " << j.y << ")" << endl;
+			for (int j = 0; j < data[i].length(); j++) {
+				cout << "(" << data[i].get(j).x << ", " << data[i].get(j).y << ")" << endl;
 			}
                 }
 
