@@ -76,9 +76,9 @@ public:
 		data = new GrowArray[s * s];
 		size = s;
 
-		for (int i = 0; i < s * s; i++) {
-			data[i] = GrowArray(1);
-		}
+//		for (int i = 0; i < s * s; i++) {
+//			data[i] = GrowArray(2);
+//		}
 	}
 
 	void read(const string& filename) {
@@ -154,10 +154,10 @@ public:
 int main() {
   // for homework n=16
 	ConvexHull ch(16); // create a 16x16 grid of GrowArray
-//	ch.read("convexhullpoints.dat");
-//	ch.printAllListSizes(); // tell us how many are in each list
-//	ch.printMinMax(); // print minx, maxx, miny, maxy
-//	ch.printPerimeterClockWiseOrder(); // p1,p2,p3,p4,p8,p12,p16..
+	ch.read("convexhullpoints.dat");
+	ch.printAllListSizes(); // tell us how many are in each list
+	ch.printMinMax(); // print minx, maxx, miny, maxy
+	ch.printPerimeterClockWiseOrder(); // p1,p2,p3,p4,p8,p12,p16..
 
 	return 0;
 }  
