@@ -6,6 +6,7 @@
 #include <sstream>
 #include <string>
 #include <cfloat>
+#include <algorithm>
 
 using namespace std;
 
@@ -86,7 +87,7 @@ public:
 	void read(const string& filename) {
 		fstream f;
 		GrowArray t(1);
-		double minx = DBL_MAX, miny = DBL_MAX, maxx = DBL_MIN, maxy = DBL_MIN;
+		minx = DBL_MAX, miny = DBL_MAX, maxx = DBL_MIN, maxy = DBL_MIN;
 		
 		double x, y;
 		string line;
@@ -96,12 +97,17 @@ public:
 			istringstream iss(line);
 			iss >> x;
 			iss >> y;
-
-			minx = x > minx ? minx : x;
-			miny = y > miny ? miny : y;
-			maxx = x > maxx ? x : maxx;
-			maxy = y > maxy ? y : maxy;
-
+/*
+			minx = min(minx, x);
+			miny = min(miny, y);
+			maxx = max(maxx, x);
+			maxy = max(maxy, y);
+*/
+			
+            minx = x > minx? minx : x;
+            miny = y > miny? miny : y;
+            maxx = x > maxx? x : maxx;
+            maxy = y > maxy? y : maxy;
 			Point tp(x, y);
 			t.addEnd(tp);
 		}
