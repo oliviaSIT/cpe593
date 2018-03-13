@@ -162,7 +162,9 @@ public:
 
 			if (instructor == "OUTPUT")
 				output();
-		
+			
+			instructor = "";
+			v1 = "";
 		}
 
 	}
