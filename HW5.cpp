@@ -1,5 +1,6 @@
+//created by Jiabin Li
+
 #include <iostream>
-#include <vector>
 
 using namespace std;
 
@@ -8,112 +9,128 @@ private:
 	class Bucket {
 	public:
 		int val;
-		bool present;
-		Bucket() { present = false; }
+		bool exist;
+		Bucket() { 
+			exist = false; 
+		}
 	};
-	Bucket *table;
+
+	Bucket* bin;
 	uint32_t size;
 	uint32_t used;
-	uint32_t histogram[52] = { 0 };
+	uint32_t histogram[52] = {0};
 	void grow() {
 		uint32_t oldsize = size;
-		Bucket *old = table;
+		Bucket* old = bin;
 		size *= 2;
-		table = new Bucket[size];
+		bin = new Bucket[size];
 		used = 0;
-		for (int i = 0; i < oldsize; i++)
-			if (old[i].present)
-				addHash(old[i].val);
+		for (int i = 0; i < (int)oldsize; i++) {
+			if (old[i].exist)
+				add(old[i].val);
+		}
+
 		delete[] old;
 		histogram[0] = size - used;
 	}
+
 public:
-	HashMapLinearProbing(uint32_t initialSize = 1024) :size(initialSize), used(0) {
-		int digit = 0;
-		for (int i = 0; i < 32; i++) {
-			digit += size & 1;
-			size = size >> 1;
+	HashMapLinearProbing(uint32_t initialSize = 1024): size(initialSize), used(0) {
+		uint32_t i = 1, n = 0;
+
+		while (i < size && n < 32) {
+			i *= 2;
+			n++;
 		}
-		size = initialSize;
-		if (digit != 1 && !(size & 0x80000000)) {
-			int c;
-			for (c = 0; c < 32 && !(size & 0x80000000); c++) {
-				size = size << 1;
-			}
-			size = 0x80000000;
-			c--;
-			while (c) {
-				size = size >> 1;
-				c--;
-			}
-		}
-		table = new Bucket[size];
+
+		size = i;
+
+		bin = new Bucket[size];
 		histogram[0] = size - used;
 	}
+
 	~HashMapLinearProbing() {
-		delete[] table;
+		delete[] bin;
 	}
+
 	HashMapLinearProbing(const HashMapLinearProbing& orig) :size(orig.size), used(orig.used) {
-		table = new Bucket[size];
-		for (int i = 0; i < size; i++)
-			if (orig.table[i].present) {
-				table[i].val = orig.table[i].val;
-				table[i].present = true;
+		bin = new Bucket[size];
+
+		for (int i = 0; i < (int)size; i++) {
+			if (orig.bin[i].exist) {
+				bin[i].val = orig.bin[i].val;
+				bin[i].exist = true;
 			}
+		}
+
 		histogram[0] = size - used;
+
 		for (int i = 1; i < 52; i++)
 			histogram[i] = 0;
 	}
-	void addHash(int n) {
-		uint32_t index = n & (size - 1);
+
+	void add(int n) {
+		uint32_t index = n % size;
 		uint32_t count = 1;
-		while (table[index].present) {
+
+		while (bin[index].exist) {
 			index++;
-			index = index & (size - 1);
+			index = index % size;
 			count++;
 		}
-		table[index].val = n;
-		table[index].present = true;
+
+		bin[index].val = n;
+		bin[index].exist = true;
 		used++;
+
 		if (count > 50)
 			count = 51;
+
 		histogram[count]++;
 		histogram[0]--;
+
 		if (used * 2 > size)
 			grow();
 	}
-	bool findHash(int n) {
-		uint32_t index = n & (size - 1);
-		while (table[index].present) {
-			if (table[index].val == n)
+
+	bool find(int n) {
+		uint32_t index = n % size;
+
+		while (bin[index].exist) {
+			if (bin[index].val == n)
 				return true;
+
 			index++;
-			index = index & (size - 1);
+			index = index % size;
 		}
+
 		return false;
 	}
+
 	void displayHistogram() {
 		for (int i = 0; i < 51; i++)
-			cout << i << ":\t" << histogram[i] << endl;
-		cout << ">50:\t" << histogram[51] << endl;
+			cout << i << ": " << histogram[i] << endl;
+		cout << ">50: " << histogram[51] << endl;
 	}
 };
 
 int main() {
-	HashMapLinearProbing hash(8);
+	HashMapLinearProbing m;
+
+	int n;
+	cout << "Please input n: ";
+	cin >> n;
 
 /*
-	int n;
-	cout << "Input n: ";
-	cin >> n;
-*/
-
 	vector<int> v{1,9,10,17};
 	for (int i = 0; i < 4; i++)
-		hash.addHash(v[i]);
-	hash.displayHistogram();
+		m.add(v[i]);
+*/
+	
+	for (int i = 0; i < n; i++)
+		m.add(rand());
+	
+	m.displayHistogram();
 
-
-	//	system("pause");
 	return 0;
 }
